@@ -74,7 +74,7 @@ function generateNovelContent(novel) {
 
 function downloadTxt(downloadNew) {
 	if (!downloadNew) {		
-		var cachedNovel = localStorage.getItem(window.url);
+		var cachedNovel = localStorage.getItem(window.location.href);
 		if (cachedNovel != null) {
 			console.info("cache found for current novel");
 			download(JSON.parse(cachedNovel));
@@ -101,12 +101,12 @@ function downloadTxt(downloadNew) {
 		novel.content = novelContent;
 		var serializableNovel = JSON.stringify(novel);
 		try {
-			localStorage.setItem(window.url, serializableNovel)
+			localStorage.setItem(location.href, serializableNovel)
 		}
 		catch(e) {
 			//storage is full now
 			localStorage.clear();
-			localStorage.setItem(window.url, serializableNovel)
+			localStorage.setItem(location.href, serializableNovel)
 		}
 		download(novel);
 	});
