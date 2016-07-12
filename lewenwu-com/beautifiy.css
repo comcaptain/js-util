@@ -1,0 +1,35 @@
+/*美化小说目录页面和章节页面*/
+#content{
+    font-weight: normal;
+    font-size: 18px!important;
+    margin-bottom: 50px;
+}
+body > *, .border_b, .css, .kfyd > br, .cad, .cad_kf, .cbotm, .listb, .listi, .con_ad, .share  {
+    display: none;
+}
+.kfyd, #content, .kfml {
+    display: block;
+    border: none;
+}
+body {
+    background-color: #E5E4DB;
+}
+.kfyd, .kfml {
+    width: 800px;
+    background-color: #F6F4EC;
+    box-shadow: 0 0 15px 0 #CCC;
+}
+.kfml {
+    width: 950px;
+}
+#thumb a, #thumb a:hover {
+    border: none;
+    background-color: #F6F4EC;
+    color: black;
+    text-decoration: initial;
+}
+.infot > *, .infot {
+    font-weight: normal!important;
+    color: black!important;
+    display: none;
+}
