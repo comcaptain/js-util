@@ -20,7 +20,7 @@ function extractTestLink(doc) {
 function getScore(url) {
 	return retrieveDocument(url).then(function(doc){
 		var testLink = extractTestLink(doc);
-		if (testLink === undefined) return 100;
+		if (!testLink) return 100;
 		var tr = testLink.parentNode.parentNode;
 		var scoreTd = tr.children[2];
 		var scoreText = scoreTd.textContent.trim();
@@ -61,6 +61,7 @@ function doTest(formData, progress, lastAnswer, lastScore) {
 		console.info("答案", stringifyAnswer(optionsList, newAnswer), "的分数是", score);
 		if (score === 100) {
 			alert("100分拿好了~ 正确答案是：" + stringifyAnswer(optionsList, newAnswer));
+			window.location.reload()
 			return;
 		}
 		//this is the first test or score does not change
