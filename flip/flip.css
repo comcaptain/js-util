@@ -1,0 +1,42 @@
+#flip-container {
+	perspective: 1000px;
+	margin: 30px auto;
+}
+
+#flip-container, #card-front, #card-back {
+	width: 320px;
+	height: 480px;
+	line-height: 480px;
+}
+
+#flip-container:hover #card {
+	transform: rotateY(180deg);
+}
+
+#card {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+#card-front, #card-back {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	backface-visibility: hidden;
+	font-size: 28px;
+	font-family: consolas;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+}
+
+#card-front {
+	background: #cc9797;
+	transform: rotateY(0deg);
+}
+
+#card-back {
+	background: #8eca8e;
+	transform: rotateY(180deg);
+}
