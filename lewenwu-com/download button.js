@@ -21,7 +21,7 @@ function crawlChapter(url) {
 				chapterName: extractChapterName(doc),
 				content: extractContent(doc)
 			}
-			console.info("crawled chapter ", chapter.chapterName);
+			console.info(`${++window.crawledCount}/${window.chapterCount} crawled chapter ${chapter.chapterName}`);
 			resolve(chapter);
 		});
 		xhr.responseType = "document";
@@ -83,6 +83,8 @@ function downloadTxt(downloadNew) {
 	}
 	var novel = {};
 	var chapterUrls = extractChapterUrls();
+	window.chapterCount = chapterUrls.length;
+	window.crawledCount = 0;
 	Promise.all(chapterUrls.map(function(url){return crawlChapter(url)}))
 	.then(function(chapters) {
 		var chaptersMapByUrl = {};
@@ -106,7 +108,12 @@ function downloadTxt(downloadNew) {
 		catch(e) {
 			//storage is full now
 			localStorage.clear();
-			localStorage.setItem(location.href, serializableNovel)
+			try {
+				localStorage.setItem(location.href, serializableNovel)
+			}
+			catch(e) {
+				console.warn("Novel is too large to store into local storage");
+			}
 		}
 		download(novel);
 	});
