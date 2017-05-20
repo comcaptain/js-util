@@ -1,5 +1,6 @@
+//Now this is for website: http://www.xs82.net/
 function extractContent(doc) {
-	var content = doc.querySelector("#content");
+	var content = doc.querySelector("#book_text");
 	[].slice.call(content.children)
 		.filter(function(node){return node.nodeName.toLowerCase() !== "br"})
 		.forEach(function(node) {node.remove()})
@@ -8,7 +9,7 @@ function extractContent(doc) {
 } 
 
 function extractChapterName(doc) {
-	return doc.querySelector(".kfyd > h1").textContent.trim().replace(/^(\d+)/, "第$1章");
+	return doc.querySelector("#mains > .book_content_text > h1").textContent.trim();
 }
 
 function crawlChapter(url) {
@@ -31,35 +32,14 @@ function crawlChapter(url) {
 	})
 }
 
-function crawlNovelInfo(url) {
-	return new Promise(function(resolve, reject){
-		var xhr = new XMLHttpRequest();
-		xhr.addEventListener("load", function() {
-			var doc = xhr.response;
-			var h1 = doc.querySelector(".f20h");
-			var authorEm = h1.querySelector("em");
-			var author = authorEm.textContent.trim().replace("作者：","");
-			authorEm.remove();
-			var novelName = h1.textContent.trim();
-			console.info("crawled novel information ", novelName, author);
-			resolve({
-				novelName: novelName,
-				author: author
-			});
-		});
-		xhr.responseType = "document";
-		xhr.open("GET", url);
-		xhr.send();
-		console.info("crawling: ", url);
-	});
-}
-
 function extractChapterUrls() {
-	return [].slice.apply(document.querySelectorAll(".chapterlist > li > a")).map(function(a) {return a.href});
-}
-
-function extractNovelInfoUrl() {
-	return document.querySelectorAll("ul.bread-crumbs > li > a")[1].href;
+	var chapterNamesMap = {};
+	return [].slice.apply(document.querySelectorAll("ul[id=chapterlist] > li > a")).filter(a => {
+		var chapterName = a.textContent.trim();
+		if (chapterNamesMap[chapterName] !== undefined) return false;
+		chapterNamesMap[chapterName] = true;
+		return true;
+	}).map(function(a) {return a.href});
 }
 
 function generateNovelContent(novel) {
@@ -92,12 +72,8 @@ function downloadTxt(downloadNew) {
 			chaptersMapByUrl[chapters[i].url] = chapters[i]
 		}
 		novel.chapters = chapterUrls.map(function(url){return chaptersMapByUrl[url];});
-		var novelInfoUrl = extractNovelInfoUrl();
-		return crawlNovelInfo(novelInfoUrl)
-	})
-	.then(function(novelInfo) {
-		novel.novelName = novelInfo.novelName;
-		novel.author = novelInfo.author;
+		novel.novelName = document.querySelector('#maininfo > div.info > h1').textContent;
+		novel.author = document.querySelector('#maininfo > div.info > h3 > a').textContent;
 		var novelContent = generateNovelContent(novel);
 		novel.chapters = undefined;
 		novel.content = novelContent;
@@ -141,7 +117,7 @@ function createDownloadButton() {
  	})
 }
 document.addEventListener("DOMContentLoaded", function() {
-	if (document.querySelector("ul.chapterlist")) {
+	if (document.querySelector("#chapterlist")) {
 		createDownloadButton();	
 	}
 })

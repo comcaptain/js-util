@@ -1,8 +1,8 @@
 #downloadNovel {
 	display: block;
     position: fixed;
-    top: 10px;
-    left: calc(50% - 600px);
+    top: 60px;
+    left: calc(50% - 625px);
 	-moz-box-shadow: 0px 10px 14px -7px #276873;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #599bb3), color-stop(1, #408c99));
 	background:-moz-linear-gradient(top, #599bb3 5%, #408c99 100%);
