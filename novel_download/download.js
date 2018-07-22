@@ -1,5 +1,7 @@
-var CHAPTER_URL_SELECTOR = "#chapterList > li > a"
-var CHAPTER_CONTENT_SELECTOR = "#contentbox"
+// 笔趣阁 https://www.biduo.cc/
+var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+var CHAPTER_CONTENT_SELECTOR = "#content"
+
 
 function extractContent(doc) {
 	var content = doc.querySelector(CHAPTER_CONTENT_SELECTOR);
