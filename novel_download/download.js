@@ -1,6 +1,11 @@
 // 笔趣阁 https://www.biduo.cc/
-var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+// var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+// var CHAPTER_CONTENT_SELECTOR = "#content"
+
+// 顶点小说 https://www.23us.cc
+var CHAPTER_URL_SELECTOR = "dl.chapterlist > dd > a"
 var CHAPTER_CONTENT_SELECTOR = "#content"
+
 
 
 function extractContent(doc) {
