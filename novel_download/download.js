@@ -3,18 +3,17 @@
 // var CHAPTER_CONTENT_SELECTOR = "#content"
 
 // 顶点小说 https://www.23us.cc
-var CHAPTER_URL_SELECTOR = "dl.chapterlist > dd > a"
-var CHAPTER_CONTENT_SELECTOR = "#content"
+// var CHAPTER_URL_SELECTOR = "dl.chapterlist > dd > a"
+// var CHAPTER_CONTENT_SELECTOR = "#content"
 
-
+// 笔下文学 http://www.bxwx3.org
+var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+var CHAPTER_CONTENT_SELECTOR = "#zjneirong"
 
 function extractContent(doc) {
-	var content = doc.querySelector(CHAPTER_CONTENT_SELECTOR);
-	[].slice.call(content.children)
-		.filter(function(node){return node.nodeName.toLowerCase() !== "br"})
-		.forEach(function(node) {node.remove()})
-	content.innerHTML = content.innerHTML.replace(/<br\s*\/?>/ig, "\n");
-	return content.textContent;
+	let contentNode = doc.querySelector(CHAPTER_CONTENT_SELECTOR);
+	[].slice.apply(contentNode.querySelectorAll("#xuanchuan")).forEach(node => node.remove());
+	return contentNode.innerText.trim();
 } 
 
 function crawlChapter(chapterInfo) {
@@ -28,8 +27,14 @@ function crawlChapter(chapterInfo) {
 				chapterName: chapterInfo.chapter_name,
 				content: extractContent(doc)
 			}
-			console.info(`${++window.crawledCount}/${window.chapterCount} crawled chapter ${chapter.chapterName}`);
-			resolve(chapter);
+			if (!chapter.content) {
+				console.error(`Failed to crawl chapter ${chapter.chapterName} ${url}`);
+				crawlChapter(chapterInfo).then(resolve);
+			}
+			else {
+				console.info(`${++window.crawledCount}/${window.chapterCount} crawled chapter ${chapter.chapterName}`);
+				resolve(chapter);
+			}
 		});
 		xhr.responseType = "document";
 		xhr.open("GET", url);
