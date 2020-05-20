@@ -21,10 +21,12 @@ function extractInfo(islandNode) {
 
 function filter() {
 	let islandNodes = document.querySelectorAll(ISLAND_SELECTOR);
-	console.info(`Found ${islandNodes.length} islands`)
+	console.info(`Found ${islandNodes.length} islands`);
+	let priceThreshold = parseInt(document.querySelector(`[name=${PRICE_NAME}]:checked`).value);
+	let queueSizeThreshold = parseInt(document.querySelector(`[name=${QUEUE_SIZE_NAME}]:checked`).value);
 	for (let islandNode of islandNodes) {
 		let info = extractInfo(islandNode);
-		if (info.price < 500 || info.queueSize > 5 
+		if (info.price < priceThreshold || info.queueSize > queueSizeThreshold 
 			|| info.text.toLowerCase().includes("nmt")
 			|| info.text.toLowerCase().includes("99k")
 			|| info.text.toLowerCase().includes("stacks of turnip")) {
