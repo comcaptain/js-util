@@ -32,6 +32,9 @@ function filter() {
 			|| info.text.toLowerCase().includes("stacks of turnip")) {
 			islandNode.style.display = "none";
 		}
+		else {
+			islandNode.style.display = null;
+		}
 	}
 }
 
@@ -67,6 +70,13 @@ function drawGUI() {
 	document.body.appendChild(container);
 }
 
+function bindListeners() {
+	document.querySelector("#tony-exchange").addEventListener("change", event => {
+		if (event.target.getAttribute("type") !== "radio") return;
+		filter();
+	})
+}
+
 async function waitUntilLoaded() {
 	if (!window.location.href.endsWith("turnip.exchange/islands")) return;
 	while (true) {
@@ -77,6 +87,7 @@ async function waitUntilLoaded() {
 	}
 	drawGUI();
 	filter();
+	bindListeners();
 }
 
 window.onload = waitUntilLoaded
