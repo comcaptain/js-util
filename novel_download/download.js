@@ -1,17 +1,27 @@
 // 笔趣阁 https://www.biduo.cc/
-// var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
-// var CHAPTER_CONTENT_SELECTOR = "#content"
-
+var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+var CHAPTER_CONTENT_SELECTOR = "#content"
+// https://www.booktxt.com/24_24720/
+// 诡秘之主: http://www.173kt.net/book/16688/ 1300
+// 从姑获鸟开始：http://www.054.la/shu4055/ 9
+// 我师兄实在太稳健了: https://www.23txt.com/files/article/html/56/56263/
+// 九星毒奶 http://www.853.la/shu1609/
+ 
 // 顶点小说 https://www.23us.cc
 // var CHAPTER_URL_SELECTOR = "dl.chapterlist > dd > a"
 // var CHAPTER_CONTENT_SELECTOR = "#content"
 
 // 笔下文学 http://www.bxwx3.org
-var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
-var CHAPTER_CONTENT_SELECTOR = "#zjneirong"
+// var CHAPTER_URL_SELECTOR = "#list > dl > dd > a"
+// var CHAPTER_CONTENT_SELECTOR = "#zjneirong"
 
-function extractContent(doc) {
+// 顶点小说 https://www.23us.so
+// var CHAPTER_URL_SELECTOR = "#a_main .bdsub #at td.L > a"
+// var CHAPTER_CONTENT_SELECTOR = "#contents"
+
+function extractContent(doc, url) {
 	let contentNode = doc.querySelector(CHAPTER_CONTENT_SELECTOR);
+	if (contentNode == null) console.info("bad url", url, doc.body.innerHTML);
 	[].slice.apply(contentNode.querySelectorAll("#xuanchuan")).forEach(node => node.remove());
 	return contentNode.innerText.trim();
 } 
@@ -25,11 +35,11 @@ function crawlChapter(chapterInfo) {
 			var chapter = {
 				url: url,
 				chapterName: chapterInfo.chapter_name,
-				content: extractContent(doc)
+				content: extractContent(doc, url)
 			}
 			if (!chapter.content) {
 				console.error(`Failed to crawl chapter ${chapter.chapterName} ${url}`);
-				crawlChapter(chapterInfo).then(resolve);
+				resolve(chapter);
 			}
 			else {
 				console.info(`${++window.crawledCount}/${window.chapterCount} crawled chapter ${chapter.chapterName}`);
@@ -45,7 +55,8 @@ function crawlChapter(chapterInfo) {
 
 function extractChapterInfos() {
 	return [].slice.apply(document.querySelectorAll(CHAPTER_URL_SELECTOR))
-		.map(a => ({url: a.href, chapter_name: a.textContent}));
+		.map(a => ({url: a.href, chapter_name: a.textContent}))
+		.slice(1300);
 }
 
 function generateNovelContent(novel) {
