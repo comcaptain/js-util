@@ -77,6 +77,12 @@ function bindListeners() {
 	})
 }
 
+function initialize() {
+	drawGUI();
+	filter();
+	bindListeners();	
+}
+
 async function waitUntilLoaded() {
 	if (!window.location.href.endsWith("turnip.exchange/islands")) return;
 	while (true) {
@@ -85,9 +91,9 @@ async function waitUntilLoaded() {
 		if (islandCount > 0) break;
 		await new Promise(resolve => setTimeout(resolve, 100));	
 	}
-	drawGUI();
-	filter();
-	bindListeners();
+	initialize();
 }
 
 window.onload = waitUntilLoaded
+
+initialize();
