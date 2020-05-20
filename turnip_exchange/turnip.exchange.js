@@ -1,3 +1,4 @@
+// Minify code in https://javascript-minifier.com/
 const PRICE_SELECTOR = "p.ml-2";
 const QUEUE_STATUS_SELECTOR = "p.mr-1";
 const TEXT_SELECTOR = "p.text-xs.p-4";
@@ -19,21 +20,30 @@ function extractInfo(islandNode) {
 	}
 }
 
-function filter() {
-	let islandNodes = document.querySelectorAll(ISLAND_SELECTOR);
+function process() {
+	// Find all islands
+	let islandNodes = [].slice.apply(document.querySelectorAll(ISLAND_SELECTOR));
+	if (islandNodes.length === 0) return;
 	console.info(`Found ${islandNodes.length} islands`);
+	let islands = islandNodes.map(extractInfo);
+
+	// Sort islands by price descending
+	let container = islandNodes[0].parentNode;
+	islandNodes.forEach(n => container.removeChild(n));
+	islands.sort((a, b) => b.price - a.price).forEach(i => container.appendChild(i.node));
+
+	// Filter
 	let priceThreshold = parseInt(document.querySelector(`[name=${PRICE_NAME}]:checked`).value);
 	let queueSizeThreshold = parseInt(document.querySelector(`[name=${QUEUE_SIZE_NAME}]:checked`).value);
-	for (let islandNode of islandNodes) {
-		let info = extractInfo(islandNode);
-		if (info.price < priceThreshold || info.queueSize > queueSizeThreshold 
-			|| info.text.toLowerCase().includes("nmt")
-			|| info.text.toLowerCase().includes("99k")
-			|| info.text.toLowerCase().includes("stacks of turnip")) {
-			islandNode.style.display = "none";
+	for (let island of islands) {
+		if (island.price < priceThreshold || island.queueSize > queueSizeThreshold 
+			|| island.text.toLowerCase().includes("nmt")
+			|| island.text.toLowerCase().includes("99k")
+			|| island.text.toLowerCase().includes("stacks of turnip")) {
+			island.node.style.display = "none";
 		}
 		else {
-			islandNode.style.display = null;
+			island.node.style.display = null;
 		}
 	}
 }
@@ -73,13 +83,13 @@ function drawGUI() {
 function bindListeners() {
 	document.querySelector("#tony-exchange").addEventListener("change", event => {
 		if (event.target.getAttribute("type") !== "radio") return;
-		filter();
+		process();
 	})
 }
 
 function initialize() {
 	drawGUI();
-	filter();
+	process();
 	bindListeners();	
 }
 
@@ -96,4 +106,4 @@ async function waitUntilLoaded() {
 
 window.onload = waitUntilLoaded
 
-initialize();
+// initialize();
