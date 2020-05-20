@@ -35,6 +35,7 @@ function process() {
 	// Filter
 	let priceThreshold = parseInt(document.querySelector(`[name=${PRICE_NAME}]:checked`).value);
 	let queueSizeThreshold = parseInt(document.querySelector(`[name=${QUEUE_SIZE_NAME}]:checked`).value);
+	let foundIsland = false;
 	for (let island of islands) {
 		if (island.price < priceThreshold || island.queueSize > queueSizeThreshold 
 			|| island.text.toLowerCase().includes("nmt")
@@ -44,7 +45,12 @@ function process() {
 		}
 		else {
 			island.node.style.display = null;
+			foundIsland = true;
 		}
+	}
+	if (!foundIsland) {
+		console.info("island not found, going to refresh within 5 seconds")
+		setTimeout(() => location.reload(), 5000);
 	}
 }
 
@@ -72,8 +78,8 @@ function drawGUI() {
 	let container = document.createElement("div");
 	container.id = "tony-exchange";
 	container.appendChild(createCheckBox(PRICE_NAME, "400", false, "$"));
-	container.appendChild(createCheckBox(PRICE_NAME, "450", false, "$"));
-	container.appendChild(createCheckBox(PRICE_NAME, "500", true, "$"));
+	container.appendChild(createCheckBox(PRICE_NAME, "500", false, "$"));
+	container.appendChild(createCheckBox(PRICE_NAME, "600", true, "$"));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "5", true));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "10"));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "20"));
