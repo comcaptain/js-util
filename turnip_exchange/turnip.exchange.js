@@ -48,11 +48,18 @@ function process() {
 			foundIsland = true;
 		}
 	}
-	if (!foundIsland) {
+	if (foundIsland) {
+		notify();
+	}
+	else {
 		let waitSeconds = 25 + parseInt(Math.random() * 10);
 		console.info("island not found, going to refresh within " + waitSeconds + " seconds")
 		setTimeout(() => location.reload(), waitSeconds * 1000);
 	}
+}
+
+function notify() {
+	new Audio("https://raw.githubusercontent.com/comcaptain/js-util/master/turnip_exchange/notify.mp3").play();
 }
 
 /*
