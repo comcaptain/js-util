@@ -49,7 +49,7 @@ function process() {
 		}
 	}
 	if (!foundIsland) {
-		let waitSeconds = 3 + parseInt(Math.random() * 5);
+		let waitSeconds = 25 + parseInt(Math.random() * 10);
 		console.info("island not found, going to refresh within " + waitSeconds + " seconds")
 		setTimeout(() => location.reload(), waitSeconds * 1000);
 	}
