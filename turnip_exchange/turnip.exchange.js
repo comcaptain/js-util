@@ -40,7 +40,9 @@ function process() {
 		if (island.price < priceThreshold || island.queueSize > queueSizeThreshold 
 			|| island.text.toLowerCase().includes("nmt")
 			|| island.text.toLowerCase().includes("99k")
-			|| island.text.toLowerCase().includes("stacks of turnip")) {
+			|| island.text.toLowerCase().includes("stacks of turnip")
+			|| island.text.toLowerCase().includes("ticket")
+			|| island.text.toLowerCase().includes("bell bags")) {
 			island.node.style.display = "none";
 		}
 		else {
@@ -85,9 +87,9 @@ function createCheckBox(name, value, isChecked, suffix) {
 function drawGUI() {
 	let container = document.createElement("div");
 	container.id = "tony-exchange";
-	container.appendChild(createCheckBox(PRICE_NAME, "400", false, "$"));
 	container.appendChild(createCheckBox(PRICE_NAME, "500", false, "$"));
-	container.appendChild(createCheckBox(PRICE_NAME, "600", true, "$"));
+	container.appendChild(createCheckBox(PRICE_NAME, "550", true, "$"));
+	container.appendChild(createCheckBox(PRICE_NAME, "600", false, "$"));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "5", true));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "10"));
 	container.appendChild(createCheckBox(QUEUE_SIZE_NAME, "20"));
