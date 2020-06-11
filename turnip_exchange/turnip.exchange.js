@@ -1,4 +1,6 @@
-// Minify code in https://javascript-minifier.com/
+// const script = document.createElement("script");
+// script.setAttribute("src", "https://comcaptain.github.io/js-util/turnip_exchange/turnip.exchange.js")
+// document.body.appendChild(script);
 const PRICE_SELECTOR = "p.ml-2";
 const QUEUE_STATUS_SELECTOR = "p.mr-1";
 const TEXT_SELECTOR = "p.text-xs.p-4";
@@ -7,7 +9,8 @@ const ISLAND_SELECTOR = "div.note";
 const PRICE_NAME = "price";
 const QUEUE_SIZE_NAME = "queue-size";
 
-function extractInfo(islandNode) {
+function extractInfo(islandNode)
+{
 	let price = parseInt(islandNode.querySelector(PRICE_SELECTOR).textContent.replace(" Bells", ""));
 	let queueText = islandNode.querySelector(QUEUE_STATUS_SELECTOR).textContent.trim();
 	let queueSize = parseInt(queueText.match(/^Waiting: (\d+)\/\d+/)[1]);
@@ -20,9 +23,10 @@ function extractInfo(islandNode) {
 	}
 }
 
-function process() {
+function process()
+{
 	// Find all islands
-	let islandNodes = [].slice.apply(document.querySelectorAll(ISLAND_SELECTOR));
+	let islandNodes = [].slice.apply(document.querySelectorAll(ISLAND_SELECTOR)).filter(v => v.querySelector(PRICE_SELECTOR));
 	if (islandNodes.length === 0) return;
 	console.info(`Found ${islandNodes.length} islands`);
 	let islands = islandNodes.map(extractInfo);
@@ -36,13 +40,15 @@ function process() {
 	let priceThreshold = parseInt(document.querySelector(`[name=${PRICE_NAME}]:checked`).value);
 	let queueSizeThreshold = parseInt(document.querySelector(`[name=${QUEUE_SIZE_NAME}]:checked`).value);
 	let foundIsland = false;
-	for (let island of islands) {
-		if (island.price < priceThreshold || island.queueSize > queueSizeThreshold 
+	for (let island of islands)
+	{
+		if (island.price < priceThreshold || island.queueSize > queueSizeThreshold
 			|| island.text.toLowerCase().includes("nmt")
 			|| island.text.toLowerCase().includes("99k")
 			|| island.text.toLowerCase().includes("stacks of turnip")
 			|| island.text.toLowerCase().includes("ticket")
-			|| island.text.toLowerCase().includes("bell bags")) {
+			|| island.text.toLowerCase().includes("bell bags"))
+			{
 			island.node.style.display = "none";
 		}
 		else {
@@ -50,7 +56,8 @@ function process() {
 			foundIsland = true;
 		}
 	}
-	if (foundIsland) {
+	if (foundIsland)
+	{
 		notify();
 	}
 	else {
@@ -60,7 +67,8 @@ function process() {
 	}
 }
 
-function notify() {
+function notify()
+{
 	new Audio("https://raw.githubusercontent.com/comcaptain/js-util/master/turnip_exchange/notify.mp3").play();
 }
 
@@ -72,11 +80,12 @@ function notify() {
 	</label>
 </span>
 */
-function createCheckBox(name, value, isChecked, suffix) {
+function createCheckBox(name, value, isChecked, suffix)
+{
 	if (suffix === undefined) suffix = "";
 	let checked = isChecked ? "checked" : "";
 	let container = document.createElement("span");
-	container.innerHTML = 
+	container.innerHTML =
 		`<input class="my-checkbox" type="radio" ${checked} name="${name}" id="${name}-${value}" value="${value}">
 		<label class="for-my-checkbox" for="${name}-${value}">
 			<span data-hover="${value}${suffix}">${value}${suffix}</span>
@@ -84,7 +93,8 @@ function createCheckBox(name, value, isChecked, suffix) {
 	return container;
 }
 
-function drawGUI() {
+function drawGUI()
+{
 	let container = document.createElement("div");
 	container.id = "tony-exchange";
 	container.appendChild(createCheckBox(PRICE_NAME, "500", false, "$"));
@@ -96,26 +106,30 @@ function drawGUI() {
 	document.body.appendChild(container);
 }
 
-function bindListeners() {
+function bindListeners()
+{
 	document.querySelector("#tony-exchange").addEventListener("change", event => {
 		if (event.target.getAttribute("type") !== "radio") return;
 		process();
 	})
 }
 
-function initialize() {
+function initialize()
+{
 	drawGUI();
 	process();
-	bindListeners();	
+	bindListeners();
 }
 
-async function waitUntilLoaded() {
+async function waitUntilLoaded()
+{
 	if (!window.location.href.endsWith("turnip.exchange/islands")) return;
-	while (true) {
+	while (true)
+	{
 		let islandCount = document.querySelectorAll(ISLAND_SELECTOR).length;
 		console.info(`There are ${islandCount} islands now`);
 		if (islandCount > 0) break;
-		await new Promise(resolve => setTimeout(resolve, 100));	
+		await new Promise(resolve => setTimeout(resolve, 100));
 	}
 	initialize();
 }
