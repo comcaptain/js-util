@@ -26,7 +26,10 @@ function extractInfo(islandNode)
 function process()
 {
 	// Find all islands
-	let islandNodes = [].slice.apply(document.querySelectorAll(ISLAND_SELECTOR)).filter(v => v.querySelector(PRICE_SELECTOR));
+	let islandNodes = [].slice.apply(document.querySelectorAll(ISLAND_SELECTOR)).filter(v => {
+		if (v.querySelector(PRICE_SELECTOR)) return true;
+		v.style.display = "none";
+	});
 	if (islandNodes.length === 0) return;
 	console.info(`Found ${islandNodes.length} islands`);
 	let islands = islandNodes.map(extractInfo);
